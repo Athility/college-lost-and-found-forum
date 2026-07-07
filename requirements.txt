@@ -3,3 +3,5 @@ pillow>=10.0
 asgiref
 sqlparse
 tzdata
+dj-database-url
+psycopg2-binary

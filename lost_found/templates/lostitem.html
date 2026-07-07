@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Lost Items{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h1 class="mb-4 text-primary font-weight-bold">Lost Items</h1>
+    <div class="row">
+        {% for item in items %}
+            {% include "item_card.html" %}
+        {% empty %}
+            <!-- Show if no items were lost -->
+            <div class="col-12 text-center my-5">
+                <div class="card p-5 bg-light border-0 shadow-sm">
+                    <h3 class="text-muted mb-3">No lost items reported yet.</h3>
+                    <p class="text-secondary">If you lost something on campus, use the "Report Item" link above to register it!</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

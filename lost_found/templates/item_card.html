@@ -1,0 +1,31 @@
+<div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <!-- Check if optional image exists before rendering -->
+                    {% if item.image %}
+                        <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.title }}" style="height: 200px; object-fit: cover;">
+                    {% endif %}
+                    
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.title }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">By {{ item.user.username }}</h6>
+                        
+                        <!-- Using get_FIELDNAME_display for choices -->
+                        <span class="badge badge-info mb-2">{{ item.get_status_display }}</span>
+                        <span class="badge badge-info mb-2">{{ item.get_catagories_display }}</span>
+                        <p class="card-text">Lost near: {{ item.location }}</p>
+                        <p class="card-text">{{ item.description|truncatewords:20 }}</p>
+                        {% if item.status == 'C' and item.claimed_by %}
+                            <p class="card-text text-success font-weight-bold small">Claimed by: {{ item.claimed_by.username }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="card-footer text-muted d-flex justify-content-between align-items-center">
+                        <small>Added: {{ item.created_at|date:"M d, Y" }}</small>
+                        {% if user.is_authenticated and item.status != 'C' %}
+                            <form action="{% url 'claim item' item.id %}" method="POST" onsubmit="return confirm('Are you sure you want to mark this item as Claimed/Recovered?');" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-success font-weight-bold">Claim</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+                </div>

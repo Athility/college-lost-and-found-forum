@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      {% block title %}
+        Django App
+      {% endblock %}
+    </title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"  rel="stylesheet" />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="{% url 'home' %}">College Lost And Found Forum</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+  <!-- 1. Home is always visible to everyone -->
+  <li class="nav-item active">
+    <a class="nav-link" href="{% url 'home' %}">Home</a>
+  </li>
+  <li class="nav-item">
+      <a class="nav-link" href="{% url 'Lost Items' %}">Lost Items</a>
+    </li>
+  <li class="nav-item">
+      <a class="nav-link" href="{% url 'Found Items' %}">Found Items</a>
+    </li>
+  <li class="nav-item">
+      <a class="nav-link" href="{% url 'Claimed Items' %}">Claimed Items</a>
+    </li>
+  <!-- 2. Check if the user is logged in -->
+  {% if user.is_authenticated %}
+    <!-- Show options for logged-in users -->
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'Lost Item Registration' %}">Report Item</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+    </li>
+    <li class="nav-item">
+  <form action="{% url 'logout' %}" method="POST" class="form-inline d-inline">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-link nav-link" style="display: inline; border: none; background: none; margin: 0; padding: 8px 15px;">
+      Log Out
+    </button>
+  </form>
+</li>
+    <!-- Show a greeting with their username -->
+    <span class="navbar-text ml-lg-3 text-primary font-weight-bold">
+      Hello, {{ user.username }}
+    </span>
+
+  {% else %}
+    <!-- Show options for guests/logged-out users -->
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'login' %}">Log In</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'sign up' %}">Sign Up</a>
+    </li>
+    
+  {% endif %}
+</ul>
+      </div>
+    </nav>
+    <div class="container">{% block content %} {% endblock %}</div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" ></script>
+  </body>
+</html>

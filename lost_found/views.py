@@ -101,3 +101,16 @@ def claim_item(request, item_id):
         next_url = request.META.get('HTTP_REFERER', 'home')
         return redirect(next_url)
     return redirect('home')
+
+def setup_db(request):
+    from django.core.management import call_command
+    from django.contrib.auth.models import User
+    from django.http import HttpResponse
+    try:
+        call_command('migrate')
+        if not User.objects.filter(is_superuser=True).exists():
+            User.objects.create_superuser('admin', 'admin@example.com', 'admin123')
+            return HttpResponse("Database migrated and superuser created (admin / admin123). Please delete this endpoint after use for security!")
+        return HttpResponse("Database migrated successfully. Superuser already exists.")
+    except Exception as e:
+        return HttpResponse(f"Error setting up database: {str(e)}")

@@ -77,6 +77,8 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 import dj_database_url
 
+import os
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -84,9 +86,10 @@ DATABASES = {
     }
 }
 
-db_from_env = dj_database_url.config(conn_max_age=600)
-if db_from_env:
-    DATABASES['default'].update(db_from_env)
+# Support both Vercel Postgres Integration and manual DATABASE_URL
+db_url = os.environ.get('POSTGRES_URL') or os.environ.get('DATABASE_URL')
+if db_url:
+    DATABASES['default'] = dj_database_url.parse(db_url, conn_max_age=600)
 
 
 # Password validation
